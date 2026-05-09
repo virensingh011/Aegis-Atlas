@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aegis Atlas | Disaster Intelligence Research Program</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main id="authScreen" class="auth-shell">
+      <section class="auth-panel">
+        <div class="brand-mark">AA</div>
+        <p class="eyebrow">Advanced climate risk laboratory</p>
+        <h1>Aegis Atlas</h1>
+        <p class="auth-copy">
+          A deployable disaster intelligence research program for monitoring humidity stress,
+          seismic exposure, floods, fires, storms, and operational response priorities.
+        </p>
+        <form id="loginForm" class="login-form">
+          <label>
+            Research ID
+            <input id="emailInput" type="email" placeholder="researcher@aegis.ai" required />
+          </label>
+          <label>
+            Access Key
+            <input id="passwordInput" type="password" placeholder="atlas-2026" required />
+          </label>
+          <button type="submit">Enter Command Center</button>
+        </form>
+        <p class="hint">Demo access: any email and any password with 6+ characters.</p>
+        <p class="founder">Founded by <strong>Viren Singh</strong></p>
+      </section>
+      <section class="auth-metrics" aria-label="Program capabilities">
+        <div>
+          <span>192</span>
+          <p>countries modeled</p>
+        </div>
+        <div>
+          <span>8</span>
+          <p>risk engines</p>
+        </div>
+        <div>
+          <span>24/7</span>
+          <p>field operations view</p>
+        </div>
+      </section>
+    </main>
+
+    <main id="appShell" class="app-shell hidden">
+      <aside class="sidebar">
+        <div class="app-brand">
+          <div class="brand-mark">AA</div>
+          <div>
+            <strong>Aegis Atlas</strong>
+            <span>Viren Singh Research Program</span>
+          </div>
+        </div>
+        <nav>
+          <button class="nav-btn active" data-view="overview">Mission Control</button>
+          <button class="nav-btn" data-view="map">World Risk Map</button>
+          <button class="nav-btn" data-view="reports">Reports Lab</button>
+          <button class="nav-btn" data-view="models">Model Bench</button>
+          <button class="nav-btn" data-view="science">Science Forge</button>
+        </nav>
+        <div class="user-card">
+          <span id="userInitial">R</span>
+          <div>
+            <strong id="userEmail">researcher@aegis.ai</strong>
+            <small>Principal investigator</small>
+          </div>
+        </div>
+        <button id="logoutBtn" class="secondary-btn">Log out</button>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Global disaster intelligence system</p>
+            <h2 id="viewTitle">Mission Control</h2>
+          </div>
+          <div class="topbar-actions">
+            <button id="simulateBtn">Run 72h Simulation</button>
+            <button id="exportBtn" class="secondary-btn">Export Data</button>
+          </div>
+        </header>
+
+        <section id="overviewView" class="view active">
+          <div class="metric-grid">
+            <article class="metric-card danger">
+              <span>Global Risk Index</span>
+              <strong id="globalRisk">0</strong>
+              <p>weighted by severity, exposure, humidity, and response lag</p>
+            </article>
+            <article class="metric-card">
+              <span>Active Incidents</span>
+              <strong id="incidentCount">0</strong>
+              <p>multi-hazard events requiring continuous monitoring</p>
+            </article>
+            <article class="metric-card">
+              <span>Population Exposure</span>
+              <strong id="populationExposure">0M</strong>
+              <p>estimated people within affected operational radii</p>
+            </article>
+            <article class="metric-card">
+              <span>Humidity Stress</span>
+              <strong id="humidityStress">0%</strong>
+              <p>regions where humidity amplifies heat or storm risk</p>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Hazard Composition</h3>
+                <span>live model mix</span>
+              </div>
+              <canvas id="hazardChart" height="240"></canvas>
+            </article>
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Priority Queue</h3>
+                <span>triaged by response burden</span>
+              </div>
+              <div id="priorityList" class="priority-list"></div>
+            </article>
+            <article class="panel wide">
+              <div class="panel-head">
+                <h3>Automated Executive Summary</h3>
+                <span>generated from current incident model</span>
+              </div>
+              <p id="executiveSummary" class="summary-text"></p>
+            </article>
+            <article class="panel wide">
+              <div class="panel-head">
+                <h3>Intelligence Core</h3>
+                <span>computed from risk vectors</span>
+              </div>
+              <div class="intel-grid">
+                <div>
+                  <label>
+                    Ask the analyst engine
+                    <input id="analystQuery" type="text" value="Which incidents need action first and why?" />
+                  </label>
+                  <button id="askAnalystBtn">Run Analysis</button>
+                  <div id="analystAnswer" class="calculation-result"></div>
+                </div>
+                <div id="anomalyPanel" class="intel-list"></div>
+                <div id="recommendationPanel" class="intel-list"></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="mapView" class="view">
+          <div class="map-layout">
+            <article class="map-panel">
+              <div id="map"></div>
+            </article>
+            <aside class="control-panel">
+              <h3>Layer Controls</h3>
+              <label class="check-row"><input type="checkbox" id="layerDisasters" checked /> Disaster incidents</label>
+              <label class="check-row"><input type="checkbox" id="layerHumidity" checked /> Humidity pressure</label>
+              <label class="check-row"><input type="checkbox" id="layerResponse" checked /> Response readiness</label>
+              <label class="check-row"><input type="checkbox" id="layerClusters" checked /> Risk clusters</label>
+              <label>
+                Severity threshold
+                <input id="severityRange" type="range" min="1" max="10" value="4" />
+              </label>
+              <label>
+                Scenario
+                <select id="scenarioSelect">
+                  <option value="baseline">Baseline monitoring</option>
+                  <option value="monsoon">Monsoon escalation</option>
+                  <option value="heat">Extreme heat surge</option>
+                  <option value="seismic">Seismic cascade</option>
+                </select>
+              </label>
+              <div id="mapInsight" class="insight-box"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="reportsView" class="view">
+          <div class="report-layout">
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Report Builder</h3>
+                <span>field-ready synthesis</span>
+              </div>
+              <label>
+                Region focus
+                <select id="regionSelect"></select>
+              </label>
+              <label>
+                Report type
+                <select id="reportType">
+                  <option value="executive">Executive briefing</option>
+                  <option value="scientific">Scientific assessment</option>
+                  <option value="operations">Operations plan</option>
+                </select>
+              </label>
+              <button id="generateReportBtn">Generate Report</button>
+              <button id="downloadReportBtn" class="secondary-btn">Download Report</button>
+            </article>
+            <article class="panel report-output">
+              <div class="panel-head">
+                <h3>Generated Intelligence Report</h3>
+                <span id="reportTimestamp">not generated</span>
+              </div>
+              <pre id="reportOutput"></pre>
+            </article>
+          </div>
+        </section>
+
+        <section id="modelsView" class="view">
+          <div class="model-grid">
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Risk Equation</h3>
+                <span>transparent scoring</span>
+              </div>
+              <div id="equationList" class="equation-list"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Forecast Lab</h3>
+                <span>72-hour scenario estimate</span>
+              </div>
+              <canvas id="forecastChart" height="260"></canvas>
+            </article>
+            <article class="panel wide">
+              <div class="panel-head">
+                <h3>Research Notes</h3>
+                <span>engineering trace</span>
+              </div>
+              <div id="researchNotes" class="notes-grid"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="scienceView" class="view">
+          <div class="science-layout">
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Research Project Library</h3>
+                <span>chemistry + physics</span>
+              </div>
+              <div class="filter-row">
+                <label>
+                  Discipline
+                  <select id="disciplineFilter">
+                    <option value="All">All disciplines</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Physics">Physics</option>
+                  </select>
+                </label>
+                <label>
+                  Level
+                  <select id="levelFilter">
+                    <option value="All">All levels</option>
+                    <option value="Foundation">Foundation</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Research">Research</option>
+                  </select>
+                </label>
+              </div>
+              <div id="projectLibrary" class="project-library"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Equation Engine</h3>
+                <span>instant lab calculations</span>
+              </div>
+              <label>
+                Calculator
+                <select id="calculatorSelect">
+                  <option value="molarity">Chemistry: molarity</option>
+                  <option value="ph">Chemistry: pH from H+ concentration</option>
+                  <option value="gas">Chemistry/Physics: ideal gas law</option>
+                  <option value="halflife">Chemistry/Physics: half-life decay</option>
+                  <option value="energy">Physics: kinetic energy</option>
+                  <option value="projectile">Physics: projectile range</option>
+                  <option value="ohm">Physics: Ohm's law</option>
+                  <option value="wave">Physics: wave speed</option>
+                </select>
+              </label>
+              <div id="calculatorInputs" class="calculator-inputs"></div>
+              <button id="calculateBtn">Calculate</button>
+              <div id="calculatorResult" class="calculation-result">Select a calculator and enter values.</div>
+            </article>
+
+            <article class="panel wide">
+              <div class="panel-head">
+                <h3>Research Brief Generator</h3>
+                <span>turn a topic into an experiment plan</span>
+              </div>
+              <div class="brief-grid">
+                <label>
+                  Topic
+                  <input id="briefTopic" type="text" value="Atmospheric humidity and battery corrosion" />
+                </label>
+                <label>
+                  Research mode
+                  <select id="briefMode">
+                    <option value="lab">Lab experiment</option>
+                    <option value="field">Field study</option>
+                    <option value="simulation">Computational simulation</option>
+                    <option value="prototype">Engineering prototype</option>
+                  </select>
+                </label>
+                <button id="generateBriefBtn">Generate Brief</button>
+              </div>
+              <pre id="briefOutput" class="brief-output"></pre>
+            </article>
+
+            <article class="panel wide">
+              <div class="panel-head">
+                <h3>Chemistry And Physics Model Atlas</h3>
+                <span>atomic, molecular, classical, quantum, field, and engineering models</span>
+              </div>
+              <div class="model-atlas-controls">
+                <label>
+                  Search model
+                  <input id="modelSearch" type="text" placeholder="Try Rutherford, Bohr, thermodynamics, Maxwell..." />
+                </label>
+                <label>
+                  Domain
+                  <select id="modelDomainFilter">
+                    <option value="All">All domains</option>
+                    <option value="Atomic">Atomic</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Engineering">Engineering</option>
+                  </select>
+                </label>
+                <label>
+                  Depth
+                  <select id="modelDepthFilter">
+                    <option value="All">All depth</option>
+                    <option value="Foundational">Foundational</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Research">Research</option>
+                  </select>
+                </label>
+              </div>
+              <div class="model-lab">
+                <div class="model-canvas-wrap">
+                  <canvas id="modelCanvas" width="900" height="520"></canvas>
+                </div>
+                <div class="model-lab-controls">
+                  <label>
+                    Working 3D model
+                    <select id="activeModelSelect"></select>
+                  </label>
+                  <label>
+                    Speed
+                    <input id="modelSpeed" type="range" min="0" max="100" value="45" />
+                  </label>
+                  <label>
+                    Complexity
+                    <input id="modelComplexity" type="range" min="1" max="10" value="6" />
+                  </label>
+                  <button id="modelPauseBtn" class="secondary-btn">Pause Model</button>
+                  <div id="modelReadout" class="calculation-result"></div>
+                </div>
+              </div>
+              <div id="modelAtlasStats" class="model-atlas-stats"></div>
+              <div id="modelAtlas" class="model-atlas"></div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
